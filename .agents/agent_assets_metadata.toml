@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "Ov-HkhqMyReHOrjqtL0mi"
+uri = "file://artifacts/complaint-desk/public/og-image.png"
+type = "image"
+title = "CampusDesk share image"

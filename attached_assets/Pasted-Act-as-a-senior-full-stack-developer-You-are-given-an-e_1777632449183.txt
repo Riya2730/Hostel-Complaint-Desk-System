@@ -1,0 +1,255 @@
+Act as a senior full-stack developer.
+
+You are given an existing project that already has a working UI but has major missing functionality.
+
+Your task is to FIX and COMPLETE the system so it becomes a fully functional AI-powered complaint management system with proper role-based access control.
+
+---
+
+## 🔴 CURRENT PROBLEMS (MUST FIX ALL)
+
+* No admin creation system
+* No Secret Admin Code logic
+* No way to assign staff roles
+* No user management page
+* No strict role-based access control
+* All users behave like normal users
+* Frontend and backend are not properly enforcing roles
+
+---
+
+## 🎯 GOAL
+
+Transform this into a complete system with:
+
+* Secure admin creation
+* Role-based access (student/admin/staff)
+* Admin dashboard with user management
+* Staff assignment system
+* Fully working backend + frontend integration
+
+---
+
+## 🔷 1. SECRET ADMIN CODE (MANDATORY)
+
+Implement secure admin creation:
+
+* Add environment variable:
+  ADMIN_SECRET=MY_SECRET_123
+
+* Modify registration API:
+
+  * Default role = "student"
+  * If adminCode === ADMIN_SECRET → role = "admin"
+
+* Admin code must be validated ONLY in backend
+
+* Do NOT expose admin secret in frontend
+
+---
+
+## 🔷 2. USER MODEL UPDATE
+
+Ensure user schema includes:
+
+* name
+* email
+* password (hashed using bcrypt)
+* role (enum: "student", "admin", "staff")
+
+Default role = "student"
+
+---
+
+## 🔷 3. AUTHENTICATION FIX
+
+During login:
+
+* Verify user credentials
+* Include role in JWT token
+* Ensure backend uses role from database (not frontend)
+
+---
+
+## 🔷 4. ROLE-BASED ACCESS CONTROL (CRITICAL)
+
+Create middleware:
+
+* verifyJWT
+* authorizeRole(role)
+
+Apply rules:
+
+Student:
+
+* Only access own complaints
+
+Staff:
+
+* Only access assigned complaints
+
+Admin:
+
+* Full access
+
+---
+
+## 🔷 5. ADMIN USER MANAGEMENT (MANDATORY)
+
+Create admin-only feature:
+
+Frontend:
+
+* Add "Manage Users" page in Admin Dashboard
+
+Display table:
+Name | Email | Role | Actions
+
+Actions:
+
+* Make Staff
+* Make Admin
+* Make Student
+
+Backend API:
+
+PUT /api/admin/change-role/:userId
+
+Requirements:
+
+* Only admin can access
+* Validate role input
+* Update role in database
+
+---
+
+## 🔷 6. STAFF ASSIGNMENT SYSTEM
+
+Admin must be able to assign complaints:
+
+Backend:
+PUT /api/admin/assign
+
+* Assign complaint to staff user
+
+Frontend:
+
+* Add "Assign" button in admin dashboard
+* Dropdown to select staff
+
+---
+
+## 🔷 7. FRONTEND ROLE-BASED UI (VERY IMPORTANT)
+
+Fix UI behavior:
+
+* Show different dashboards based on role:
+
+Student:
+
+* Submit complaint
+* Track own complaints
+
+Staff:
+
+* View assigned complaints
+* Update status
+
+Admin:
+
+* View all complaints
+* Assign staff
+* Manage users
+
+---
+
+## 🔷 8. ROUTE PROTECTION
+
+Restrict frontend routes:
+
+* /admin → admin only
+* /staff → staff only
+* /dashboard → student only
+
+If unauthorized:
+
+* Redirect OR show "Access Denied"
+
+---
+
+## 🔷 9. BACKEND DATA FILTERING
+
+Ensure:
+
+* Student → only own complaints
+* Staff → only assigned complaints
+* Admin → all complaints
+
+---
+
+## 🔷 10. AI INTEGRATION (KEEP WORKING)
+
+Ensure:
+
+* Complaint text is sent to AI API
+
+* AI returns:
+
+  * category
+  * priority
+  * sentiment
+
+* Store results in database
+
+---
+
+## 🔷 11. ERROR HANDLING
+
+Handle:
+
+* Invalid role
+* Unauthorized access
+* Missing role
+* AI failure (fallback)
+* Invalid inputs
+
+---
+
+## 🔷 12. SECURITY
+
+* Use bcrypt for password hashing
+* Use JWT authentication
+* Validate roles in backend
+* Never trust frontend role
+
+---
+
+## 🔷 13. FINAL EXPECTATION
+
+After fixing:
+
+✔ Signup without code → student
+✔ Signup with correct admin code → admin
+✔ Admin can assign staff roles
+✔ Staff sees only assigned complaints
+✔ Student sees only their complaints
+✔ Admin dashboard fully works
+✔ UI and backend are connected
+
+---
+
+## 🔷 OUTPUT REQUIREMENT
+
+Do NOT just explain.
+
+You MUST:
+
+* Modify backend code
+* Modify frontend code
+* Add missing pages
+* Fix role logic
+* Ensure everything works end-to-end
+
+---
+
+Start fixing now.

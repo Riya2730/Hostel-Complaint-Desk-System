@@ -368,6 +368,8 @@ components:
           type: string
         adminCode:
           type: ["string", "null"]
+        staffCode:
+          type: ["string", "null"]
       required:
         - name
         - email

@@ -14,7 +14,7 @@ router.post("/auth/register", async (req, res): Promise<void> => {
     return;
   }
 
-  const { name, email, password, adminCode } = parsed.data;
+  const { name, email, password, adminCode, staffCode } = parsed.data;
 
   const [existing] = await db.select().from(usersTable).where(eq(usersTable.email, email));
   if (existing) {
@@ -22,10 +22,13 @@ router.post("/auth/register", async (req, res): Promise<void> => {
     return;
   }
 
-  let role: "student" | "admin" = "student";
+  let role: "student" | "staff" | "admin" = "student";
   const ADMIN_SECRET = process.env.ADMIN_SECRET;
+  const STAFF_SECRET = process.env.STAFF_SECRET;
   if (adminCode && ADMIN_SECRET && adminCode === ADMIN_SECRET) {
     role = "admin";
+  } else if (staffCode && STAFF_SECRET && staffCode === STAFF_SECRET) {
+    role = "staff";
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);

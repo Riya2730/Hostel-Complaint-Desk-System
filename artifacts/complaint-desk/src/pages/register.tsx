@@ -27,6 +27,7 @@ const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   adminCode: z.string().optional(),
+  staffCode: z.string().optional(),
 });
 
 export default function Register() {
@@ -48,6 +49,7 @@ export default function Register() {
       email: "",
       password: "",
       adminCode: "",
+      staffCode: "",
     },
   });
 
@@ -151,7 +153,22 @@ export default function Register() {
                         <FormItem>
                           <FormLabel>Admin Registration Code</FormLabel>
                           <FormControl>
-                            <Input placeholder="Secret code" {...field} />
+                            <Input placeholder="Enter admin secret code" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                  {role === "staff" && (
+                    <FormField
+                      control={form.control}
+                      name="staffCode"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Staff Registration Code</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter staff secret code" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

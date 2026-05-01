@@ -36,3 +36,4 @@ externalPort = 3000
 [userenv.shared]
 ADMIN_SECRET = "MY_SECRET_123"
 JWT_SECRET = "hostel_complaint_desk_jwt_secret_2024"
+STAFF_SECRET = "STAFF_CODE_456"

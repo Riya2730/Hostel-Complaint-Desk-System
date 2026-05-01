@@ -10,6 +10,7 @@ import {
 } from "@workspace/api-zod";
 import { verifyJWT, authorizeRole } from "../middlewares/auth";
 import { analyzeComplaint } from "../lib/ai";
+import { sendStatusUpdateToStudent } from "../lib/email";
 
 const router: IRouter = Router();
 
@@ -262,6 +263,15 @@ router.put("/complaints/:id", verifyJWT, async (req, res): Promise<void> => {
       .where(eq(complaintsTable.id, id))
       .returning();
     const [submitter] = await db.select().from(usersTable).where(eq(usersTable.id, existing.userId));
+    if (status && submitter) {
+      sendStatusUpdateToStudent({
+        studentEmail: submitter.email,
+        studentName: submitter.name,
+        complaintTitle: existing.title,
+        complaintId: id,
+        newStatus: status,
+      }).catch(() => {});
+    }
     res.json({ ...updated, userName: submitter?.name ?? null, assignedToName: null });
     return;
   }

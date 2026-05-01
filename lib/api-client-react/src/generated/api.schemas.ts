@@ -19,6 +19,8 @@ export interface RegisterBody {
   password: string;
   /** @nullable */
   adminCode?: string | null;
+  /** @nullable */
+  staffCode?: string | null;
 }
 
 export interface LoginBody {

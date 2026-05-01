@@ -3,6 +3,7 @@ import { db, usersTable, complaintsTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { ChangeUserRoleBody, AssignComplaintBody } from "@workspace/api-zod";
 import { verifyJWT, authorizeRole } from "../middlewares/auth";
+import { sendComplaintAssignedToStaff, sendComplaintAssignedToStudent } from "../lib/email";
 
 const router: IRouter = Router();
 
@@ -84,6 +85,27 @@ router.put("/admin/complaints/:id/assign", verifyJWT, authorizeRole("admin"), as
     .returning();
 
   const [submitter] = await db.select().from(usersTable).where(eq(usersTable.id, existing.userId));
+
+  // Fire-and-forget email notifications
+  Promise.all([
+    sendComplaintAssignedToStaff({
+      staffEmail: staff.email,
+      staffName: staff.name,
+      complaintTitle: existing.title,
+      complaintId: id,
+      location: existing.location,
+      studentName: submitter?.name ?? "A student",
+    }),
+    submitter
+      ? sendComplaintAssignedToStudent({
+          studentEmail: submitter.email,
+          studentName: submitter.name,
+          complaintTitle: existing.title,
+          complaintId: id,
+          staffName: staff.name,
+        })
+      : Promise.resolve(),
+  ]).catch(() => {});
 
   res.json({
     ...updated,

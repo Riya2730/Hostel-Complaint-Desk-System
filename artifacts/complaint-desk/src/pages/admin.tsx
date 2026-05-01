@@ -66,7 +66,7 @@ export default function AdminDashboard() {
   const handleAssign = (complaintId: number, staffIdStr: string) => {
     const staffId = parseInt(staffIdStr, 10);
     if (isNaN(staffId)) return;
-    fetch("/api/admin/assign", {
+    fetch(`${import.meta.env.BASE_URL}api/admin/assign`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ complaintId, staffId }),

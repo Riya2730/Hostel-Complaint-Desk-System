@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Campus Complaint Desk"
+version = "1.0.0"
+id = "artifacts/complaint-desk"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25917
+
+[services.development]
+run = "pnpm --filter @workspace/complaint-desk run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/complaint-desk", "run", "build" ]
+publicDir = "artifacts/complaint-desk/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25917"
+BASE_PATH = "/"

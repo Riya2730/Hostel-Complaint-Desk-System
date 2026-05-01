@@ -1,0 +1,302 @@
+Act as a senior full-stack developer and build a complete, working project from scratch:
+
+PROJECT NAME:
+AI-Powered Hostel / Campus Complaint Desk System
+
+The project must be fully functional, beginner-friendly, and runnable inside Replit.
+
+---
+
+## 🔷 1. TECH STACK (USE THIS ONLY)
+
+Frontend:
+
+* React (Vite)
+
+Backend:
+
+* Node.js + Express
+
+Database:
+
+* MongoDB (Mongoose)
+
+AI Module:
+
+* Python FastAPI
+
+Authentication:
+
+* JWT
+
+---
+
+## 🔷 2. PROJECT STRUCTURE
+
+Create:
+
+/client → React frontend
+/server → Node backend
+/ai-service → Python FastAPI
+
+---
+
+## 🔷 3. CORE FEATURES
+
+Student:
+
+* Register/Login
+* Submit complaint (title, description, category, location, image optional)
+* Track complaint status
+* Give feedback
+
+Admin:
+
+* View all complaints
+* Assign complaints to staff
+* Change user roles
+* View analytics
+
+Staff:
+
+* View assigned complaints
+* Update status (Pending → In Progress → Resolved)
+
+---
+
+## 🔷 4. ROLE SYSTEM (MANDATORY)
+
+Roles:
+
+* student (default)
+* admin
+* staff
+
+User schema must include:
+
+* name
+* email
+* password (hashed)
+* role (enum: student/admin/staff, default student)
+
+---
+
+## 🔷 5. SECRET ADMIN CODE (VERY IMPORTANT)
+
+Implement secure admin creation:
+
+* Use environment variable:
+  ADMIN_SECRET=MY_SECRET_123
+
+* During registration:
+
+  * If adminCode matches ADMIN_SECRET → role = "admin"
+  * Else → role = "student"
+
+* Do NOT expose secret in frontend
+
+* Validate only in backend
+
+---
+
+## 🔷 6. BACKEND CODE REQUIREMENTS
+
+Create Express server with:
+
+Auth routes:
+
+* POST /api/auth/register
+* POST /api/auth/login
+
+Complaint routes:
+
+* POST /api/complaints
+* GET /api/complaints
+* PUT /api/complaints/:id
+
+Admin routes:
+
+* PUT /api/admin/change-role/:userId
+* PUT /api/admin/assign
+
+---
+
+## 🔷 7. ROLE-BASED ACCESS CONTROL
+
+Create middleware:
+
+* verifyJWT → authenticate user
+* authorizeRole(role)
+
+Permissions:
+
+Student:
+
+* Can only create + view own complaints
+
+Staff:
+
+* Can only see assigned complaints
+
+Admin:
+
+* Full access
+
+---
+
+## 🔷 8. ADMIN USER MANAGEMENT (MANDATORY)
+
+Create Admin Dashboard feature:
+
+* View all users
+* Change roles:
+  → student ↔ staff ↔ admin
+
+Backend API:
+
+PUT /api/admin/change-role/:userId
+
+---
+
+## 🔷 9. AI MODULE (MANDATORY)
+
+Create Python FastAPI service:
+
+Endpoint:
+POST /analyze
+
+Input:
+
+* complaint text
+
+Output:
+
+* category
+* priority
+* sentiment
+
+Use:
+
+* TF-IDF + Logistic Regression
+* TextBlob or VADER
+
+---
+
+## 🔷 10. INTEGRATION
+
+* Backend calls AI API when complaint is created
+* Store AI results in MongoDB
+
+---
+
+## 🔷 11. FRONTEND REQUIREMENTS
+
+Create React UI:
+
+Pages:
+
+1. Role Selection Page (FIRST SCREEN)
+
+   * Ask: "Who are you?"
+   * Options: Student / Staff / Admin
+
+2. Auth Page:
+
+   * Student → login + signup
+   * Staff/Admin → login only
+
+3. Dashboards:
+
+Student Dashboard:
+
+* Submit complaint
+* View status
+
+Admin Dashboard:
+
+* View all complaints
+* Assign staff
+* Manage users (change roles)
+
+Staff Dashboard:
+
+* View assigned complaints
+* Update status
+
+---
+
+## 🔷 12. DATABASE MODELS
+
+User:
+
+* name
+* email
+* password
+* role
+
+Complaint:
+
+* title
+* description
+* category_user
+* category_ai
+* priority
+* sentiment
+* status
+* user_id
+* assigned_to
+* timestamps
+
+---
+
+## 🔷 13. ERROR HANDLING
+
+Handle:
+
+* Invalid input
+* Unauthorized access
+* JWT errors
+* AI failure → fallback
+* Role mismatch
+
+---
+
+## 🔷 14. SECURITY
+
+* Hash password (bcrypt)
+* JWT authentication
+* Role validation in backend
+* Do NOT trust frontend role
+
+---
+
+## 🔷 15. OUTPUT FORMAT (STRICT)
+
+Generate in this order:
+
+1. Folder structure
+2. Backend code (Express)
+3. Frontend code (React)
+4. AI service (FastAPI)
+5. Database models
+6. API flow
+7. Setup steps
+8. Run instructions
+
+---
+
+## 🔷 FINAL INSTRUCTION
+
+Do NOT explain only.
+
+Generate full working code.
+
+Ensure:
+
+* Roles work correctly
+* Admin creation via secret code works
+* Admin can assign staff
+* Frontend + backend connected
+* Project runs on Replit without errors
+
+Start building now.

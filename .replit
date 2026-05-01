@@ -1,4 +1,4 @@
-modules = ["nodejs-24"]
+modules = ["nodejs-24", "postgresql-16"]
 
 [deployment]
 router = "application"
@@ -41,3 +41,6 @@ externalPort = 3000
 ADMIN_SECRET = "MY_SECRET_123"
 JWT_SECRET = "hostel_complaint_desk_jwt_secret_2024"
 STAFF_SECRET = "STAFF_CODE_456"
+
+[nix]
+channel = "stable-25_05"

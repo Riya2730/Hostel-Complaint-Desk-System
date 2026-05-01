@@ -107,6 +107,7 @@ export interface UpdateComplaintBody {
 }
 
 export interface AssignComplaintBody {
+  complaintId?: number;
   staffId: number;
 }
 

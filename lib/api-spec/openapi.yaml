@@ -462,6 +462,8 @@ components:
     AssignComplaintBody:
       type: object
       properties:
+        complaintId:
+          type: integer
         staffId:
           type: integer
       required:

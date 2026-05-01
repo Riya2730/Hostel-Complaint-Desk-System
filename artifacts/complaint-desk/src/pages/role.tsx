@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { User, ShieldAlert, Wrench } from "lucide-react";
@@ -8,11 +7,7 @@ export default function RoleSelection() {
   const [, setLocation] = useLocation();
 
   const handleSelectRole = (role: string) => {
-    if (role === "student") {
-      setLocation("/register?role=student");
-    } else {
-      setLocation(`/login?role=${role}`);
-    }
+    setLocation(`/register?role=${role}`);
   };
 
   const roles = [

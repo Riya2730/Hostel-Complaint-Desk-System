@@ -68,7 +68,10 @@ export default function AdminDashboard() {
     if (isNaN(staffId)) return;
     fetch(`${import.meta.env.BASE_URL}api/admin/assign`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
       body: JSON.stringify({ complaintId, staffId }),
     })
       .then((res) => {

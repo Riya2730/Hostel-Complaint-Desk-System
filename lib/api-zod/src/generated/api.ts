@@ -234,6 +234,7 @@ export const AssignComplaintParams = zod.object({
 });
 
 export const AssignComplaintBody = zod.object({
+  complaintId: zod.number().optional(),
   staffId: zod.number(),
 });
 

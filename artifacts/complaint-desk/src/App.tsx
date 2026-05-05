@@ -1,5 +1,5 @@
 import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/lib/auth";
@@ -13,6 +13,13 @@ import AdminDashboard from "@/pages/admin";
 import StaffDashboard from "@/pages/staff";
 
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error: any) => {
+      if (error?.status === 401) {
+        window.dispatchEvent(new CustomEvent("auth:unauthorized"));
+      }
+    },
+  }),
   defaultOptions: {
     queries: {
       retry: (failureCount, error: any) => {
@@ -55,9 +62,11 @@ function Router() {
     <Layout>
       <Switch>
         <Route path="/">
-          {isAuthenticated && user
-            ? <Redirect to={ROLE_DASHBOARD[user.role] ?? "/role"} />
-            : <Redirect to="/role" />}
+          {isAuthenticated && user ? (
+            <Redirect to={ROLE_DASHBOARD[user.role] ?? "/role"} />
+          ) : (
+            <Redirect to="/role" />
+          )}
         </Route>
         <Route path="/role" component={RoleSelection} />
         <Route path="/login" component={Login} />

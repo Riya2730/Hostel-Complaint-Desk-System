@@ -33,7 +33,7 @@ Respond with a JSON object (no markdown) with exactly these fields:
 Return only the JSON, nothing else.`;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-5-mini",
+      model: "gpt-4o-mini",
       max_completion_tokens: 150,
       messages: [{ role: "user", content: prompt }],
     });

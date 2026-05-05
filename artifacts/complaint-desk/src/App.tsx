@@ -12,33 +12,79 @@ import Dashboard from "@/pages/dashboard";
 import AdminDashboard from "@/pages/admin";
 import StaffDashboard from "@/pages/staff";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error: any) => {
+        if (error?.status === 401 || error?.status === 403) return false;
+        return failureCount < 2;
+      },
+      staleTime: 30_000,
+    },
+  },
+});
 
-function ProtectedRoute({ component: Component, allowedRoles }: { component: any; allowedRoles?: string[] }) {
+const ROLE_DASHBOARD: Record<string, string> = {
+  admin: "/admin",
+  staff: "/staff",
+  student: "/dashboard",
+};
+
+function ProtectedRoute({
+  component: Component,
+  allowedRoles,
+}: {
+  component: React.ComponentType;
+  allowedRoles?: string[];
+}) {
   const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) return <Redirect to="/role" />;
+
   if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    return <div className="p-8 text-center text-destructive font-bold text-2xl">Access Denied</div>;
+    return <Redirect to={ROLE_DASHBOARD[user.role] ?? "/role"} />;
   }
 
   return <Component />;
 }
 
 function Router() {
+  const { isAuthenticated, user } = useAuth();
+
   return (
     <Layout>
       <Switch>
-        <Route path="/" component={RoleSelection} />
+        <Route path="/">
+          {isAuthenticated && user
+            ? <Redirect to={ROLE_DASHBOARD[user.role] ?? "/role"} />
+            : <Redirect to="/role" />}
+        </Route>
         <Route path="/role" component={RoleSelection} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <Route path="/dashboard"><ProtectedRoute component={Dashboard} allowedRoles={["student"]} /></Route>
-        <Route path="/admin"><ProtectedRoute component={AdminDashboard} allowedRoles={["admin"]} /></Route>
-        <Route path="/staff"><ProtectedRoute component={StaffDashboard} allowedRoles={["staff"]} /></Route>
+        <Route path="/dashboard">
+          <ProtectedRoute component={Dashboard} allowedRoles={["student"]} />
+        </Route>
+        <Route path="/admin">
+          <ProtectedRoute component={AdminDashboard} allowedRoles={["admin"]} />
+        </Route>
+        <Route path="/staff">
+          <ProtectedRoute component={StaffDashboard} allowedRoles={["staff"]} />
+        </Route>
         <Route component={NotFound} />
       </Switch>
     </Layout>
+  );
+}
+
+function AppInner() {
+  return (
+    <TooltipProvider>
+      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+        <Router />
+      </WouterRouter>
+      <Toaster />
+    </TooltipProvider>
   );
 }
 
@@ -46,12 +92,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <TooltipProvider>
-          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}> 
-            <Router />
-          </WouterRouter>
-          <Toaster />
-        </TooltipProvider>
+        <AppInner />
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -1,0 +1,272 @@
+Act as a senior full-stack engineer and system architect.
+
+You are given an existing full-stack project: a Campus Complaint Management System.
+
+The UI and some backend features already exist, but the system is incomplete, insecure, and not production-ready.
+
+Your task is to COMPLETE, FIX, and UPGRADE the entire system so it becomes a fully functional, secure, and deployment-ready application.
+
+Do NOT give explanations. Directly modify and improve the project code.
+
+---
+
+## 🚨 CURRENT PROBLEMS
+
+* Weak authentication and session handling
+* Role-based access is partially implemented
+* Frontend routes are not protected
+* Backend does not enforce RBAC strictly everywhere
+* No proper error handling or loading states
+* Admin dashboard is incomplete
+* No analytics/stats
+* No complaint lifecycle tracking
+* No notification system
+* API URLs are hardcoded
+* Environment variables not used properly
+* Project is not deployment-ready
+
+---
+
+## 🎯 FINAL GOAL
+
+Transform this into a complete system with:
+
+✔ Secure authentication (JWT-based)
+✔ Strict role-based access control (student, staff, admin)
+✔ Fully functional dashboards
+✔ Complaint lifecycle system
+✔ Admin user management system
+✔ Clean UI with proper feedback
+✔ Deployment-ready architecture
+
+---
+
+## 🔷 1. AUTHENTICATION SYSTEM (CRITICAL)
+
+* Use JWT authentication
+* Store token securely (localStorage or cookies)
+* Persist login after page refresh
+* Add logout functionality
+* Protect all API routes using middleware
+
+Ensure:
+
+* Invalid token → 401
+* Missing token → 401
+
+---
+
+## 🔷 2. ROLE-BASED ACCESS CONTROL (RBAC)
+
+Roles:
+
+* student
+* staff
+* admin
+
+Backend:
+
+* Create middleware: authorizeRole(role)
+* Validate role in EVERY protected route
+
+Frontend:
+
+* Implement route guards
+
+Rules:
+
+* /admin → only admin
+* /staff → only staff
+* /dashboard → only student
+
+Unauthorized:
+
+* Redirect OR show "Access Denied"
+
+---
+
+## 🔷 3. DATA ACCESS CONTROL (VERY IMPORTANT)
+
+Ensure strict filtering:
+
+Student:
+
+* Can see ONLY their complaints
+
+Staff:
+
+* Can see ONLY complaints assigned to them
+
+Admin:
+
+* Can see ALL complaints
+
+---
+
+## 🔷 4. COMPLAINT SYSTEM IMPROVEMENT
+
+Add proper complaint lifecycle:
+
+Status flow:
+
+* Pending
+* In Progress
+* Resolved
+
+Features:
+
+* Update status (staff/admin)
+* Track complaint timeline
+* Add timestamps
+
+---
+
+## 🔷 5. ADMIN DASHBOARD (MANDATORY)
+
+Create a complete admin dashboard:
+
+Features:
+
+✔ View all complaints
+✔ View all users
+✔ Change user roles
+✔ Assign complaints to staff
+
+Add analytics:
+
+* Total complaints
+* Pending complaints
+* Resolved complaints
+
+---
+
+## 🔷 6. USER MANAGEMENT SYSTEM
+
+Admin can:
+
+* View all users
+* Change role:
+
+  * student ↔ staff ↔ admin
+
+Backend API:
+PUT /api/admin/change-role/:userId
+
+Validate:
+
+* Only admin can access
+* Role must be valid
+
+---
+
+## 🔷 7. STAFF FEATURES
+
+Staff dashboard:
+
+* View assigned complaints
+* Update complaint status
+* Add remarks/notes
+
+---
+
+## 🔷 8. FRONTEND UI IMPROVEMENTS
+
+Add:
+
+✔ Loading states (spinners)
+✔ Error messages
+✔ Success notifications
+
+Hide UI elements based on role
+
+---
+
+## 🔷 9. ERROR HANDLING (IMPORTANT)
+
+Handle:
+
+* Unauthorized access
+* Invalid inputs
+* Server errors
+* Empty data states
+
+---
+
+## 🔷 10. API & ENV CONFIGURATION
+
+Replace all hardcoded URLs:
+
+Use:
+process.env.API_URL
+
+Add environment variables:
+
+* JWT_SECRET
+* DATABASE_URL
+* ADMIN_SECRET
+
+---
+
+## 🔷 11. SECURITY IMPROVEMENTS
+
+* Hash passwords using bcrypt
+* Never trust frontend role
+* Validate all inputs
+* Prevent unauthorized access everywhere
+
+---
+
+## 🔷 12. NOTIFICATION SYSTEM (ADD)
+
+Implement at least one:
+
+* Toast notifications
+* Status update alerts
+
+Example:
+
+* “Complaint status updated to Resolved”
+
+---
+
+## 🔷 13. OPTIONAL (BONUS FEATURES)
+
+If possible, add:
+
+* Complaint categories (Hostel, Academic, etc.)
+* Search & filter complaints
+* Feedback system after resolution
+* File upload support
+
+---
+
+## 🔷 14. FINAL SYSTEM VALIDATION
+
+Ensure:
+
+✔ Admin → full access
+✔ Staff → assigned complaints only
+✔ Student → own complaints only
+
+✔ No unauthorized route access
+✔ No UI leaks
+✔ All APIs working correctly
+
+---
+
+## 🔷 FINAL INSTRUCTION
+
+Do NOT explain.
+
+Modify backend + frontend + database.
+
+Make the system:
+
+✔ Fully functional
+✔ Secure
+✔ Clean UI
+✔ Deployment-ready
+
+---
+
+Start now.
